@@ -1,9 +1,7 @@
-import axios from "axios";
 import React, { useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
-import { Link } from "react-router-dom";
-
-const NewUser = () => {
+import { Link, useLoaderData } from "react-router-dom";
+const UpdateUser = () => {
   const [gender, setGender] = useState("");
   const [status, setStatus] = useState("");
 
@@ -20,9 +18,13 @@ const NewUser = () => {
     setStatus(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const loadId = useLoaderData();
+
+  console.log(loadId);
+
+  const handleUpdateUser = (event) => {
     event.preventDefault();
-    console.log("submitted");
+
     const form = event.target;
 
     const name = form.name.value;
@@ -36,36 +38,20 @@ const NewUser = () => {
     };
     console.log(user);
 
-    //using axios
+    fetch(`http://localhost:5000/user/${id}`, {
+      method: "PATCH",
 
-    axios.post("http://localhost:5000/users", user).then((data) => {
-      console.log(data.data);
+      headers: {
+        "content-type": "application/json",
+      },
 
-      if (data.data.insertedId) {
-        alert("succesfully added new user",data.data.name);
-      }
-    });
-
-    //using fetch
-
-    // fetch("http://localhost:5000/users", {
-
-    //      method : 'POST',
-
-    //      headers: {
-
-    //         'content-type': 'application/json'
-    //      },
-
-    //      body: JSON.stringify(user)
-
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     console.log(data);
-    //   });
+      body: JSON.stringify(user),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      });
   };
-
   return (
     <div className="p-20 ">
       <Link to="/">
@@ -77,8 +63,8 @@ const NewUser = () => {
         </button>{" "}
       </Link>
 
-      <h2 className="mb-10 font-bold text-center text-xl">New User</h2>
-      <form onSubmit={handleSubmit} className="">
+      <h2 className="mb-10 font-bold text-center text-xl">Update  User</h2>
+      <form onSubmit={handleUpdateUser} className="">
         <div className="form-control w-full">
           <label className="label ">
             <span className="label-text">Name</span>
@@ -155,4 +141,4 @@ const NewUser = () => {
   );
 };
 
-export default NewUser;
+export default UpdateUser;

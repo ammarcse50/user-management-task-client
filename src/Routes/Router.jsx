@@ -3,6 +3,7 @@ import Root from "../Layout/Root";
 import Home from "../components/Home";
 import NewUser from "../components/NewUser";
 import Users from "../components/Users";
+import UpdateUser from "../components/UpdateUser";
 
 const router = createBrowserRouter([
   {
@@ -18,9 +19,11 @@ const router = createBrowserRouter([
         path: "/newuser",
         element: <NewUser></NewUser>,
       },
+    
       {
-        path: "/users",
-        element: <Users></Users>,
+        path: "/user/:id",
+        element: <UpdateUser></UpdateUser>,
+        loader:  ({params}) => fetch(`http://localhost:5000/user/${params.id}`)
         
       },
     ],
